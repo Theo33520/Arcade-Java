@@ -51,7 +51,7 @@ public class MenuJava2D implements IMenu<JFrame, UIComponent, JPanel> {
         return UIComponentFactory.createLabelComponent(text, colorbg, colorfg, pos, alignment);
     }
 
-    // Méthode pour créer un UIPanelComponent
+
     public UIComponent createPanel(String text, Color colorbg, Color colorfg, int pos, float alignment) {
         return UIComponentFactory.createPanelComponent(text, colorbg, colorfg, pos, alignment);
     }
