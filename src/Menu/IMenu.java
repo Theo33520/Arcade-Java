@@ -1,4 +1,6 @@
 package Menu;
+import Menu.UIComponent.UIComponent;
+
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -26,6 +28,6 @@ public interface IMenu<Lib, Label, Panel> {
     Integer getHeight();
     Integer getWidth();
     Panel getPanel();
-    Label createLabel(String text, Color colorbg, Color colorfg, int pos, float alignment);
+    UIComponent createLabel(String text, Color colorbg, Color colorfg, int pos, float alignment);
 
 }

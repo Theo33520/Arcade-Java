@@ -2,11 +2,13 @@ package Menu;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.HashMap;
 import java.util.ArrayList;
-import java.awt.event.*;
+import java.util.HashMap;
+import Menu.UIComponent.UIComponent;
+import Menu.UIComponent.UIComponentFactory;
+import Menu.UIComponent.UIPanelComponent;
 
-public class MenuJava2D implements IMenu<JFrame, JLabel, JPanel> {
+public class MenuJava2D implements IMenu<JFrame, UIComponent, JPanel> { // Utilisation de UIComponent comme type générique
     private HashMap<Integer, Integer> _windowSizing;
     private ArrayList<String> _gameNames;
     private statusMenu _statusMenu;
@@ -17,12 +19,14 @@ public class MenuJava2D implements IMenu<JFrame, JLabel, JPanel> {
     private static final int WIDTH_DEFAULT = 1920;
     private static final int VERTICAL_STRUT_HEIGHT = 10;
 
+    // Constructeur
     public MenuJava2D(int width, int height) {
         this._windowSizing = new HashMap<>();
         this._windowSizing.put(width, height);
         this._gameNames = new ArrayList<>();
         this._gameNames.add("Snake");
         this._gameNames.add("Nibbler");
+        this._statusMenu = statusMenu.CLOSE; // Initialisation du statut du menu à "fermé"
     }
 
     @Override
@@ -38,38 +42,38 @@ public class MenuJava2D implements IMenu<JFrame, JLabel, JPanel> {
     @Override
     public JPanel getPanel() {
         JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS)); // Disposition verticale
         panel.setBackground(Color.BLACK);
         return panel;
     }
 
     @Override
-    public JLabel createLabel(String text, Color colorbg, Color colorfg, int pos, float alignment) {
-        JLabel label = new JLabel(text);
-        label.setBackground(colorbg);
-        label.setOpaque(true);
-        label.setForeground(colorfg);
-        label.setHorizontalAlignment(pos);
-        label.setAlignmentX(alignment);
-        return label;
+    public UIComponent createLabel(String text, Color colorbg, Color colorfg, int pos, float alignment) {
+        // Utilisation de la fabrique pour créer un UILabelComponent
+        return UIComponentFactory.createLabelComponent(text, colorbg, colorfg, pos, alignment);
+    }
+
+    // Méthode pour créer un UIPanelComponent
+    public UIComponent createPanel(String text, Color colorbg, Color colorfg, int pos, float alignment) {
+        return UIComponentFactory.createPanelComponent(text, colorbg, colorfg, pos, alignment);
     }
 
     public void addComponentsToPanel(JPanel panel, ArrayList<JComponent> components) {
-        panel.add(Box.createVerticalGlue());
+        panel.add(Box.createVerticalGlue()); // Ajout d'espace vertical flexible
 
         for (JComponent component : components) {
             panel.add(component);
-            panel.add(Box.createVerticalStrut(VERTICAL_STRUT_HEIGHT));
+            panel.add(Box.createVerticalStrut(VERTICAL_STRUT_HEIGHT)); // Espace entre les composants
         }
         panel.add(Box.createVerticalGlue());
-        this._window.getContentPane().add(panel);
+        this._window.getContentPane().add(panel); // Ajout du panneau à la fenêtre
     }
 
-
-    public ArrayList<JComponent> createComponentList(JLabel... labels) {
+    // Modification ici pour accepter des UIComponent
+    public ArrayList<JComponent> createComponentList(UIComponent... uiComponents) {
         ArrayList<JComponent> components = new ArrayList<>();
-        for (JLabel label : labels) {
-            components.add(label);
+        for (UIComponent component : uiComponents) {
+            components.add(component.createComponent()); // Appel à createComponent() pour chaque UIComponent
         }
         return components;
     }
@@ -83,16 +87,22 @@ public class MenuJava2D implements IMenu<JFrame, JLabel, JPanel> {
 
         JPanel panel = getPanel();
 
-        JLabel snake = createLabel("Snake", Color.BLACK, Color.WHITE, SwingConstants.CENTER, Component.CENTER_ALIGNMENT);
-        JLabel nibbler = createLabel("Nibbler", Color.BLACK, Color.WHITE, SwingConstants.CENTER, Component.CENTER_ALIGNMENT);
-        ArrayList<JComponent> components = createComponentList(snake, nibbler);
+        // Création de UILabelComponents via la fabrique
+        UIComponent snakeLabel = createLabel("Snake", Color.BLACK, Color.WHITE, SwingConstants.CENTER, Component.CENTER_ALIGNMENT);
+        UIComponent nibblerLabel = createLabel("Nibbler", Color.BLACK, Color.WHITE, SwingConstants.CENTER, Component.CENTER_ALIGNMENT);
+
+        // Création d'un UIPanelComponent via la fabrique
+        UIComponent customPanel = createPanel("", Color.DARK_GRAY, Color.WHITE, SwingConstants.CENTER, Component.CENTER_ALIGNMENT);
+
+        // Ajout des composants au panneau
+        ArrayList<JComponent> components = createComponentList(snakeLabel, nibblerLabel, customPanel);
         this.addComponentsToPanel(panel, components);
+
         this._window.setSize(this.getWidth(), this.getHeight());
         this._window.setLocationRelativeTo(null);
         this._window.setVisible(true);
         return this._window;
     }
-
 
     @Override
     public Game getGame() {
@@ -106,7 +116,10 @@ public class MenuJava2D implements IMenu<JFrame, JLabel, JPanel> {
 
     @Override
     public void stop() {
-        System.out.println("stop");
+        System.out.println("Stopping the menu...");
+        if (this._window != null) {
+            this._window.dispose(); // Fermer la fenêtre
+        }
     }
 
     @Override
