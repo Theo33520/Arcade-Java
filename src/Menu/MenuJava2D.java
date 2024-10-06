@@ -8,7 +8,7 @@ import Menu.UIComponent.UIComponent;
 import Menu.UIComponent.UIComponentFactory;
 import Menu.UIComponent.UIPanelComponent;
 
-public class MenuJava2D implements IMenu<JFrame, UIComponent, JPanel> { // Utilisation de UIComponent comme type générique
+public class MenuJava2D implements IMenu<JFrame, UIComponent, JPanel> {
     private HashMap<Integer, Integer> _windowSizing;
     private ArrayList<String> _gameNames;
     private statusMenu _statusMenu;
@@ -110,7 +110,7 @@ public class MenuJava2D implements IMenu<JFrame, UIComponent, JPanel> { // Utili
     public void stop() {
         System.out.println("Stopping the menu...");
         if (this._window != null) {
-            this._window.dispose(); // Fermer la fenêtre
+            this._window.dispose();
         }
     }
 
