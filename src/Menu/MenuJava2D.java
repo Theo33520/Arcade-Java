@@ -19,14 +19,13 @@ public class MenuJava2D implements IMenu<JFrame, UIComponent, JPanel> { // Utili
     private static final int WIDTH_DEFAULT = 1920;
     private static final int VERTICAL_STRUT_HEIGHT = 10;
 
-    // Constructeur
     public MenuJava2D(int width, int height) {
         this._windowSizing = new HashMap<>();
         this._windowSizing.put(width, height);
         this._gameNames = new ArrayList<>();
         this._gameNames.add("Snake");
         this._gameNames.add("Nibbler");
-        this._statusMenu = statusMenu.CLOSE; // Initialisation du statut du menu à "fermé"
+        this._statusMenu = statusMenu.OPEN;
     }
 
     @Override
@@ -42,14 +41,13 @@ public class MenuJava2D implements IMenu<JFrame, UIComponent, JPanel> { // Utili
     @Override
     public JPanel getPanel() {
         JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS)); // Disposition verticale
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBackground(Color.BLACK);
         return panel;
     }
 
     @Override
     public UIComponent createLabel(String text, Color colorbg, Color colorfg, int pos, float alignment) {
-        // Utilisation de la fabrique pour créer un UILabelComponent
         return UIComponentFactory.createLabelComponent(text, colorbg, colorfg, pos, alignment);
     }
 
@@ -59,21 +57,20 @@ public class MenuJava2D implements IMenu<JFrame, UIComponent, JPanel> { // Utili
     }
 
     public void addComponentsToPanel(JPanel panel, ArrayList<JComponent> components) {
-        panel.add(Box.createVerticalGlue()); // Ajout d'espace vertical flexible
+        panel.add(Box.createVerticalGlue());
 
         for (JComponent component : components) {
             panel.add(component);
-            panel.add(Box.createVerticalStrut(VERTICAL_STRUT_HEIGHT)); // Espace entre les composants
+            panel.add(Box.createVerticalStrut(VERTICAL_STRUT_HEIGHT));
         }
         panel.add(Box.createVerticalGlue());
-        this._window.getContentPane().add(panel); // Ajout du panneau à la fenêtre
+        this._window.getContentPane().add(panel);
     }
 
-    // Modification ici pour accepter des UIComponent
     public ArrayList<JComponent> createComponentList(UIComponent... uiComponents) {
         ArrayList<JComponent> components = new ArrayList<>();
         for (UIComponent component : uiComponents) {
-            components.add(component.createComponent()); // Appel à createComponent() pour chaque UIComponent
+            components.add(component.createComponent());
         }
         return components;
     }
@@ -87,14 +84,9 @@ public class MenuJava2D implements IMenu<JFrame, UIComponent, JPanel> { // Utili
 
         JPanel panel = getPanel();
 
-        // Création de UILabelComponents via la fabrique
         UIComponent snakeLabel = createLabel("Snake", Color.BLACK, Color.WHITE, SwingConstants.CENTER, Component.CENTER_ALIGNMENT);
         UIComponent nibblerLabel = createLabel("Nibbler", Color.BLACK, Color.WHITE, SwingConstants.CENTER, Component.CENTER_ALIGNMENT);
-
-        // Création d'un UIPanelComponent via la fabrique
         UIComponent customPanel = createPanel("", Color.DARK_GRAY, Color.WHITE, SwingConstants.CENTER, Component.CENTER_ALIGNMENT);
-
-        // Ajout des composants au panneau
         ArrayList<JComponent> components = createComponentList(snakeLabel, nibblerLabel, customPanel);
         this.addComponentsToPanel(panel, components);
 
