@@ -4,9 +4,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import Menu.UIComponent.UIComponent;
-import Menu.UIComponent.UIComponentFactory;
+import Menu.UIComponent.DefaultUIComponentFactory;
 import Menu.UIComponent.UIPanelComponent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import javax.swing.JOptionPane;
+
 
 public class MenuJava2D implements IMenu<JFrame, UIComponent, JPanel> {
     private HashMap<Integer, Integer> _windowSizing;
@@ -14,6 +19,7 @@ public class MenuJava2D implements IMenu<JFrame, UIComponent, JPanel> {
     private statusMenu _statusMenu;
     private Game _game;
     private JFrame _window;
+    private DefaultUIComponentFactory _factory;
 
     private static final int HEIGHT_DEFAULT = 1080;
     private static final int WIDTH_DEFAULT = 1920;
@@ -26,6 +32,8 @@ public class MenuJava2D implements IMenu<JFrame, UIComponent, JPanel> {
         this._gameNames.add("Snake");
         this._gameNames.add("Nibbler");
         this._statusMenu = statusMenu.OPEN;
+
+        this._factory = new DefaultUIComponentFactory();
     }
 
     @Override
@@ -48,15 +56,15 @@ public class MenuJava2D implements IMenu<JFrame, UIComponent, JPanel> {
 
     @Override
     public UIComponent createLabel(String text, Color colorbg, Color colorfg, int pos, float alignment) {
-        return UIComponentFactory.createLabelComponent(text, colorbg, colorfg, pos, alignment);
+        return this._factory.createLabelComponent(text, colorbg, colorfg, pos, alignment);
     }
 
-
+    @Override
     public UIComponent createPanel(String text, Color colorbg, Color colorfg, int pos, float alignment) {
-        return UIComponentFactory.createPanelComponent(text, colorbg, colorfg, pos, alignment);
+        return this._factory.createPanelComponent(text, colorbg, colorfg, pos, alignment);
     }
 
-    public void addComponentsToPanel(JPanel panel, ArrayList<JComponent> components) {
+    public void addComponentsToPanel(JPanel panel, List<JComponent> components) {
         panel.add(Box.createVerticalGlue());
 
         for (JComponent component : components) {
@@ -66,6 +74,7 @@ public class MenuJava2D implements IMenu<JFrame, UIComponent, JPanel> {
         panel.add(Box.createVerticalGlue());
         this._window.getContentPane().add(panel);
     }
+
 
     public ArrayList<JComponent> createComponentList(UIComponent... uiComponents) {
         ArrayList<JComponent> components = new ArrayList<>();
@@ -81,15 +90,17 @@ public class MenuJava2D implements IMenu<JFrame, UIComponent, JPanel> {
         this._window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this._window.setTitle(this.getNameWindow());
         this._window.getContentPane().setBackground(Color.BLACK);
-
+        List<UIComponent> components = List.of(
+                createLabel("Snake", Color.BLACK, Color.WHITE, SwingConstants.CENTER, Component.CENTER_ALIGNMENT),
+                createLabel("Nibbler", Color.BLACK, Color.WHITE, SwingConstants.CENTER, Component.CENTER_ALIGNMENT),
+                createPanel("", Color.DARK_GRAY, Color.WHITE, SwingConstants.CENTER, Component.CENTER_ALIGNMENT)
+        );
         JPanel panel = getPanel();
+        List<JComponent> uiComponents = components.stream()
+                .map(UIComponent::createComponent)
+                .toList();
 
-        UIComponent snakeLabel = createLabel("Snake", Color.BLACK, Color.WHITE, SwingConstants.CENTER, Component.CENTER_ALIGNMENT);
-        UIComponent nibblerLabel = createLabel("Nibbler", Color.BLACK, Color.WHITE, SwingConstants.CENTER, Component.CENTER_ALIGNMENT);
-        UIComponent customPanel = createPanel("", Color.DARK_GRAY, Color.WHITE, SwingConstants.CENTER, Component.CENTER_ALIGNMENT);
-        ArrayList<JComponent> components = createComponentList(snakeLabel, nibblerLabel, customPanel);
-        this.addComponentsToPanel(panel, components);
-
+        this.addComponentsToPanel(panel, uiComponents);
         this._window.setSize(this.getWidth(), this.getHeight());
         this._window.setLocationRelativeTo(null);
         this._window.setVisible(true);

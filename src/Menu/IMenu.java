@@ -29,5 +29,6 @@ public interface IMenu<Lib, Label, Panel> {
     Integer getWidth();
     Panel getPanel();
     UIComponent createLabel(String text, Color colorbg, Color colorfg, int pos, float alignment);
+    UIComponent createPanel(String text, Color colorbg, Color colorfg, int pos, float alignment);
 
 }

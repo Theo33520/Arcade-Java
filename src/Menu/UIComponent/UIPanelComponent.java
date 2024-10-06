@@ -1,9 +1,9 @@
 package Menu.UIComponent;
 
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
 
-public class UIPanelComponent extends UIComponent {
+public class UIPanelComponent extends AbstractUIComponent {
 
     public UIPanelComponent(String text, Color backgroundColor, Color foregroundColor, int position, float alignment) {
         super(text, backgroundColor, foregroundColor, position, alignment);

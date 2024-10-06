@@ -1,9 +1,9 @@
 package Menu.UIComponent;
 
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
 
-public class UILabelComponent extends UIComponent {
+public class UILabelComponent extends AbstractUIComponent {
 
     public UILabelComponent(String text, Color backgroundColor, Color foregroundColor, int position, float alignment) {
         super(text, backgroundColor, foregroundColor, position, alignment);
