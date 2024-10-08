@@ -8,6 +8,11 @@ import Games.Nibbler;
 import Menu.IMenu;
 import Menu.MenuJava2D;
 
+
+import java.util.ArrayList;
+import java.util.Vector;
+import java.util.function.Consumer;
+
 public class Core<D extends IDisplayModule, G extends IGAMES> {
 
     private String _title;
@@ -16,10 +21,15 @@ public class Core<D extends IDisplayModule, G extends IGAMES> {
     private D _displayModuleInstance;
     private G _gameModule;
     private IMenu _menu;
+    private ArrayList<String> _gamesNames = new ArrayList<>();
 
     public Core(String titleGames, MODULE module) {
         this._title = titleGames;
         this._module = module;
+        for (GAMES game : GAMES.values()) {
+            this._gamesNames.add(game.name());
+        }
+        this._gamesNames.sort((b, a) -> -1 * a.compareTo(b));
         this._game = GAMES.SNAKE;
     }
 
@@ -68,13 +78,24 @@ public class Core<D extends IDisplayModule, G extends IGAMES> {
         }
         return null;
     }
-
     public void run() {
         D displayModuleInstance = this.getDisplayModuleInstance();
         G displayGamesInstance = this.getGamesInstance();
-        IMenu instanceMenu = this.getInstanceMenu();
 
+        IMenu instanceMenu = this.getInstanceMenu();
         if (instanceMenu != null) {
+            Consumer<Integer> gameSelectedConsumer = gameName -> {
+                if (gameName == 0) {
+                    this.setGame(GAMES.NIBBLER);
+                    this.getInstanceMenu().stop();
+                    System.out.println(this.getGamesInstance().getName());
+                } else if (gameName == 1) {
+                    this.setGame(GAMES.SNAKE);
+                    this.getInstanceMenu().stop();
+                    System.out.println(this.getGamesInstance().getName());
+                }
+            };
+            instanceMenu.setGameSelectionConsumer(gameSelectedConsumer);
             instanceMenu.displayWindow();
         }
     }

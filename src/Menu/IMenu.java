@@ -36,6 +36,7 @@ public interface IMenu<Lib, Label, Panel> {
     void setIndexMenuSelected(Consumer<updateMenuSelected> callback);
 
     statusMenu getStatus();
+    void setGameSelectionConsumer(Consumer<Integer> gameSelectionConsumer);
     void setStatus(statusMenu status);
     Lib displayWindow();
     Game getGame();

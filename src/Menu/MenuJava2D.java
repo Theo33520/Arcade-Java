@@ -22,6 +22,9 @@ public class MenuJava2D implements IMenu<JFrame, UIComponent, JPanel> {
     private DefaultUIComponentFactory _factory;
     protected Consumer<updateMenuSelected> _callbackIndex;
     protected Integer _previousNumber;
+    private Consumer<Integer> gameSelectionConsumer;
+
+
 
     private static final int HEIGHT_DEFAULT = 1080;
     private static final int WIDTH_DEFAULT = 1920;
@@ -38,6 +41,11 @@ public class MenuJava2D implements IMenu<JFrame, UIComponent, JPanel> {
         this._gameNames.sort((b, a) -> -1 * a.compareTo(b));
         this._statusMenu = statusMenu.OPEN;
         this._factory = new DefaultUIComponentFactory();
+    }
+
+    @Override
+    public void setGameSelectionConsumer(Consumer<Integer> gameSelectionConsumer) {
+        this.gameSelectionConsumer = gameSelectionConsumer;
     }
 
     @Override
@@ -138,15 +146,12 @@ public class MenuJava2D implements IMenu<JFrame, UIComponent, JPanel> {
             int selectedIndex = update.index;
             if (selectedIndex == 84) {
                 if (this._previousNumber == 0) {
-                    System.out.println("The game selected is : Nibbler");
+                    this.gameSelectionConsumer.accept(0);;
                 }
                 else if (this._previousNumber == 2) {
-                    System.out.println("The game selected is : Snake");
+                    this.gameSelectionConsumer.accept(1);
                 }
-                exit(0);
             }
-
-
             if (selectedIndex >= components.size()) {
                 selectedIndex = components.size() / 2;
             } else if (selectedIndex < 0) {
