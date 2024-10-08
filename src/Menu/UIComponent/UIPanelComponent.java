@@ -5,8 +5,8 @@ import javax.swing.*;
 
 public class UIPanelComponent extends AbstractUIComponent {
 
-    public UIPanelComponent(String text, Color backgroundColor, Color foregroundColor, int position, float alignment) {
-        super(text, backgroundColor, foregroundColor, position, alignment);
+    public UIPanelComponent(String text, Color backgroundColor, int position, float alignment) {
+        super(text, backgroundColor, position, alignment);
     }
 
     @Override

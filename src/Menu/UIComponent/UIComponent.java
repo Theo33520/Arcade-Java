@@ -5,6 +5,7 @@ import javax.swing.JComponent;
 
 public interface UIComponent {
     JComponent createComponent();
+    JComponent getComponent();
 
     void setBackgroundColor(Color color);
     void setForegroundColor(Color color);
@@ -17,5 +18,4 @@ public interface UIComponent {
     int getPosition();
     float getAlignment();
     String getText();
-
 }

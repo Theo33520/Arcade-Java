@@ -9,13 +9,19 @@ public abstract class AbstractUIComponent implements UIComponent {
     protected Color foregroundColor;
     protected int position;
     protected float alignment;
+    protected JComponent component;
 
-    public AbstractUIComponent(String text, Color backgroundColor, Color foregroundColor, int position, float alignment) {
+    public AbstractUIComponent(String text, Color backgroundColor, int position, float alignment) {
         this.text = text;
         this.backgroundColor = backgroundColor;
-        this.foregroundColor = foregroundColor;
+        this.foregroundColor = Color.WHITE;
         this.position = position;
         this.alignment = alignment;
+    }
+
+    @Override
+    public JComponent getComponent() {
+        return component;
     }
 
     @Override

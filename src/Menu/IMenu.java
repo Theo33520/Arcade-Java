@@ -3,6 +3,7 @@ import Menu.UIComponent.UIComponent;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.function.Consumer;
 
 public interface IMenu<Lib, Label, Panel> {
 
@@ -12,9 +13,28 @@ public interface IMenu<Lib, Label, Panel> {
     }
 
     enum Game {
-        SNAKE,
-        NIBBLER
+        SNAKE("Snake"),
+        NIBBLER("Nibller");
+
+        private final String name;
+        Game(String name) {
+            this.name = name;
+        }
+
+        Game getName() {
+            return Game.valueOf(name);
+        }
     }
+
+    class updateMenuSelected {
+        int index;
+        updateMenuSelected(int index) {
+            this.index = index;
+        }
+    }
+
+    void setIndexMenuSelected(Consumer<updateMenuSelected> callback);
+
     statusMenu getStatus();
     void setStatus(statusMenu status);
     Lib displayWindow();
@@ -28,7 +48,7 @@ public interface IMenu<Lib, Label, Panel> {
     Integer getHeight();
     Integer getWidth();
     Panel getPanel();
-    UIComponent createLabel(String text, Color colorbg, Color colorfg, int pos, float alignment);
-    UIComponent createPanel(String text, Color colorbg, Color colorfg, int pos, float alignment);
+    UIComponent createLabel(String text, Color colorbg, int pos, float alignment);
+    UIComponent createPanel(String text, Color colorbg, int pos, float alignment);
 
 }

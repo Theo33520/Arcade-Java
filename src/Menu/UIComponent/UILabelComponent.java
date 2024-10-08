@@ -5,8 +5,8 @@ import javax.swing.*;
 
 public class UILabelComponent extends AbstractUIComponent {
 
-    public UILabelComponent(String text, Color backgroundColor, Color foregroundColor, int position, float alignment) {
-        super(text, backgroundColor, foregroundColor, position, alignment);
+    public UILabelComponent(String text, Color backgroundColor, int position, float alignment) {
+        super(text, backgroundColor, position, alignment);
     }
 
     @Override
@@ -17,6 +17,7 @@ public class UILabelComponent extends AbstractUIComponent {
         label.setForeground(this.foregroundColor);
         label.setHorizontalAlignment(this.position);
         label.setAlignmentX(this.alignment);
+        this.component = label;
         return label;
     }
 }
